@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const headers = require('./cors');
 const multipart = require('./multipartUtils');
-const keyPressHandler = require('./keyPressHandler.js');
+const keyPressHandler = require('./keypressHandler');
 
 // Path for the background image ///////////////////////
 module.exports.backgroundImageFile = path.join('.', 'background.jpg');
