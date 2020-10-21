@@ -12,12 +12,13 @@
       // cache: false,
       // contentType: false,
       // processData: false,
-      success: () => {
-        console.log('CALLED');
-        setInterval(
-          () => SwimTeam.move(commands[Math.floor(Math.random() * 4)]),
-          1000
-        );
+      success: (data) => {
+        console.log(data);
+        SwimTeam.move(data);
+        // setInterval(
+        //   () => SwimTeam.move(commands[Math.floor(Math.random() * 4)]),
+        //   1000
+        // );
       },
     });
   };
