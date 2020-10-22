@@ -5,20 +5,20 @@
   // TODO: build the swim command fetcher here
   //
   const commands = ['up', 'left', 'right', 'left'];
-  const ajaxGet = () => {
+  const ajaxGet = (sucessCB) => {
     $.ajax({
       type: 'GET',
       url: serverUrl,
-      // cache: false,
-      // contentType: false,
-      // processData: false,
       success: (data) => {
         console.log(data);
-        SwimTeam.move(data);
-        // setInterval(
-        //   () => SwimTeam.move(commands[Math.floor(Math.random() * 4)]),
-        //   1000
-        // );
+        if (data) {
+          SwimTeam.move(data);
+          ajaxGet();
+        }
+        // ajaxGet();
+      },
+      error: () => {
+        console.log('ERROR');
       },
     });
   };
