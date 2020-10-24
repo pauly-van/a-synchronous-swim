@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "formidable": "^1.2.2",
     "keypress": "^0.2.1",
     "parse-multipart": "^1.0.4",
     "underscore": "^1.9.1"

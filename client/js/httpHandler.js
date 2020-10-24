@@ -4,7 +4,7 @@
   //
   // TODO: build the swim command fetcher here
   //
-  const commands = ['up', 'left', 'right', 'left'];
+
   const ajaxGet = (sucessCB) => {
     $.ajax({
       type: 'GET',
@@ -24,7 +24,7 @@
   };
   ajaxGet();
   /////////////////////////////////////////////////////////////////////
-  // The ajax file uplaoder is provided for your convenience!
+  // The ajax file uploader is provided for your convenience!
   // Note: remember to fix the URL below.
   /////////////////////////////////////////////////////////////////////
 
@@ -40,7 +40,9 @@
       processData: false,
       success: () => {
         // reload the page
+        // setTimeout(() => {
         window.location = window.location.href;
+        // }, 2000);
       },
     });
   };

@@ -2,9 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const headers = require('./cors');
 const multipart = require('./multipartUtils');
+const formidable = require('formidable');
+const util = require('util');
+var request = require('request').defaults({ encoding: null });
 
 // Path for the background image ///////////////////////
-module.exports.backgroundImageFile = path.join('.', 'background.jpg');
+module.exports.backgroundImageFile = path.join('.', 'js/background.jpg');
 ////////////////////////////////////////////////////////
 
 let messageQueue = null;
@@ -51,10 +54,42 @@ module.exports.router = (req, res, next = () => {}) => {
 
   if (req.method === 'POST') {
     if (req.url === '/') {
-      // send swim command
-    }
-    if (req.url === '/background') {
-      // do something
+      req.on('error', function (e) {
+        console.log(e.message);
+      });
+
+      // set image data as buffer
+
+      let imageData = Buffer.alloc(0);
+      req.on('data', function (chunk) {
+        imageData = Buffer.concat([imageData, chunk]);
+      });
+
+      req.on('end', function () {
+        const finalData = multipart.getFile(imageData).data;
+        fs.writeFile(__dirname + '/background.jpg', finalData, function (err) {
+          if (err) throw err;
+          res.writeHead(200, headers);
+          res.end();
+          next();
+        });
+      });
+
+      /*
+      const form = new formidable.IncomingForm();
+      const fileDirectory = exports.backgroundImageFile;
+
+      form.parse(req);
+
+      form.on('fileBegin', (name, file) => {
+        file.path = __dirname + '/background.jpg';
+      });
+
+      */
+
+      // setTimeout(() => {
+
+      // }, 2000);
     }
   }
 
