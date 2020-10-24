@@ -45,8 +45,7 @@ describe('server responses', () => {
 
   it('should respond with 200 to a GET request for a present background image', (done) => {
     // write your test here
-    // httpHandler.backgroundImageFile = path.join('.', 'spec', 'missing.jpg');
-    let { req, res } = server.mock('/background.jpg', 'GET');
+    let { req, res } = server.mock('js/background.jpg', 'GET');
 
     httpHandler.router(req, res, () => {
       expect(res._responseCode).to.equal(200);
@@ -58,11 +57,11 @@ describe('server responses', () => {
 
   var postTestFile = path.join('.', 'spec', 'water-lg.jpg');
 
-  xit('should respond to a POST request to save a background image', (done) => {
+  it('should respond to a POST request to save a background image', (done) => {
     fs.readFile(postTestFile, (err, fileData) => {
-      httpHandler.backgroundImageFile = path.join('.', 'spec', 'temp.jpg');
-      let { req, res } = server.mock('FILL_ME_IN', 'POST', fileData);
-
+      httpHandler.backgroundImageFile = path.join('.', 'spec', 'water-lg.jpg');
+      let { req, res } = server.mock('/', 'POST', fileData);
+      // console.log('FILE DATA: ', fileData.name);
       httpHandler.router(req, res, () => {
         expect(res._responseCode).to.equal(201);
         expect(res._ended).to.equal(true);
@@ -71,13 +70,17 @@ describe('server responses', () => {
     });
   });
 
-  xit('should send back the previously saved image', (done) => {
+  it('should send back the previously saved image', (done) => {
     fs.readFile(postTestFile, (err, fileData) => {
-      httpHandler.backgroundImageFile = path.join('.', 'spec', 'temp.jpg');
-      let post = server.mock('FILL_ME_IN', 'POST', fileData);
+      httpHandler.backgroundImageFile = path.join(
+        '.',
+        'spec',
+        'water-lg.multipart'
+      );
+      let post = server.mock('/', 'POST', fileData);
 
       httpHandler.router(post.req, post.res, () => {
-        let get = server.mock('FILL_ME_IN', 'GET');
+        let get = server.mock('js/background.jpg', 'GET');
         httpHandler.router(get.req, get.res, () => {
           expect(Buffer.compare(fileData, get.res._data)).to.equal(0);
           done();
