@@ -34,15 +34,12 @@
     $.ajax({
       type: 'POST',
       data: formData,
-      url: serverUrl,
+      url: serverUrl + '/multipart',
       cache: false,
       contentType: false,
       processData: false,
       success: () => {
-        // reload the page
-        // setTimeout(() => {
         window.location = window.location.href;
-        // }, 2000);
       },
     });
   };

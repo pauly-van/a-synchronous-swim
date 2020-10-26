@@ -37,17 +37,13 @@ module.exports.router = (req, res, next = () => {}) => {
       fs.readFile(exports.backgroundImageFile, (err, data) => {
         if (err) {
           res.writeHead(404, headers);
-          res.end('404 Not Found');
-          next();
-          // throw err;
         } else {
-          {
-            console.log(data);
-            res.writeHead(200, headers);
-            res.end(data);
-            next();
-          }
+          console.log(data);
+          res.writeHead(200, headers);
+          res.write(data, 'binary');
         }
+        res.end();
+        next();
       });
     }
   }
@@ -58,8 +54,6 @@ module.exports.router = (req, res, next = () => {}) => {
         console.log(e.message);
       });
 
-      // set image data as buffer
-
       let imageData = Buffer.alloc(0);
       req.on('data', function (chunk) {
         imageData = Buffer.concat([imageData, chunk]);
@@ -67,31 +61,15 @@ module.exports.router = (req, res, next = () => {}) => {
 
       req.on('end', function () {
         const finalData = multipart.getFile(imageData).data;
-        fs.writeFile(__dirname + '/background.jpg', finalData, function (err) {
+        fs.writeFile(module.exports.backgroundImageFile, finalData, function (
+          err
+        ) {
           if (err) throw err;
-          res.writeHead(200, headers);
+          res.writeHead(201, headers);
           res.end();
           next();
         });
       });
-
-      /*
-      const form = new formidable.IncomingForm();
-      const fileDirectory = exports.backgroundImageFile;
-
-      form.parse(req);
-
-      form.on('fileBegin', (name, file) => {
-        file.path = __dirname + '/background.jpg';
-      });
-
-      */
-
-      // setTimeout(() => {
-
-      // }, 2000);
     }
   }
-
-  // invoke next() at  the end of a request to help with testing!
 };
